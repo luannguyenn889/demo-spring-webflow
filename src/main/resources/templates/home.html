@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Demo Spring Web Flow</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            color: #1f2933;
+            margin: 0;
+            padding: 32px 16px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+            border: 1px solid #d9e2ec;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+        }
+
+        h1, h2 {
+            margin-top: 0;
+        }
+
+        .lead {
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .diagram {
+            background: #0f172a;
+            color: #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            white-space: pre;
+            font-family: Consolas, monospace;
+            margin: 24px 0;
+        }
+
+        .card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .button {
+            display: inline-block;
+            background: #2563eb;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-weight: bold;
+        }
+
+        code {
+            background: #e2e8f0;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        ul {
+            line-height: 1.7;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Spring Web Flow Demo</h1>
+    <p class="lead">
+        Spring Web Flow là framework giúp quản lý các màn hình nhiều bước theo dạng
+        <strong>state</strong> và <strong>transition</strong>. Nó phù hợp khi bạn có quy trình
+        cần giữ trạng thái giữa nhiều request như đăng nhập nhiều bước, wizard đăng ký,
+        checkout, quên mật khẩu hoặc xác nhận OTP.
+    </p>
+
+    <div class="card">
+        <h2>Login Flow trong demo</h2>
+        <div class="diagram">[loginForm] --submit--> [validateInput] --valid--> [authenticateUser] --success--> [loginSuccess] --finish--> [flowEnd]
+     ^                         |                         |
+     |                         | invalid                 | failure
+     |                         v                         v
+     +------------------ [validationError] <---- [loginFailed]</div>
+
+        <p>Tài khoản demo: <code>admin</code> / <code>123456</code></p>
+        <p><a class="button" href="/login">Mở login flow</a></p>
+    </div>
+
+    <div class="card">
+        <h2>Khi nào nên dùng?</h2>
+        <ul>
+            <li>Khi quy trình có nhiều bước và mỗi bước phụ thuộc trạng thái của bước trước.</li>
+            <li>Khi bạn muốn tách rõ phần điều hướng luồng ra khỏi controller Java.</li>
+            <li>Khi cần resume flow execution qua nhiều request nhưng vẫn giữ dữ liệu trung gian.</li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

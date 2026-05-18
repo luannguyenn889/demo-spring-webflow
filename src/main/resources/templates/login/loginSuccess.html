@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Login Success</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #ecfdf3;
+            color: #14532d;
+            margin: 0;
+            padding: 32px 16px;
+        }
+
+        .panel {
+            max-width: 520px;
+            margin: 0 auto;
+            background: #ffffff;
+            border: 1px solid #bbf7d0;
+            border-radius: 12px;
+            padding: 28px;
+            box-shadow: 0 8px 22px rgba(20, 83, 45, 0.08);
+            text-align: center;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        button {
+            border: none;
+            border-radius: 8px;
+            padding: 12px 18px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .primary {
+            background: #16a34a;
+            color: #ffffff;
+        }
+
+        .secondary {
+            background: #e5e7eb;
+            color: #111827;
+        }
+
+        .meta {
+            margin-top: 18px;
+            font-size: 14px;
+            color: #166534;
+            background: #f0fdf4;
+            border: 1px solid #dcfce7;
+            border-radius: 8px;
+            padding: 12px;
+        }
+    </style>
+</head>
+<body>
+<div class="panel">
+    <h1>Đăng nhập thành công</h1>
+    <p>
+        Bạn đang ở <strong>view-state</strong> <code>loginSuccess</code>.
+        Username hiện tại là:
+    </p>
+    <p><strong th:text="${credentials.username}">admin</strong></p>
+
+    <div class="actions">
+        <form th:action="${flowExecutionUrl}" method="post">
+            <button type="submit" name="_eventId_finish" class="primary">Kết thúc flow</button>
+        </form>
+        <form th:action="${flowExecutionUrl}" method="post">
+            <button type="submit" name="_eventId_tryAgain" class="secondary">Đăng nhập lại</button>
+        </form>
+    </div>
+
+    <div class="meta">
+        <code>finish</code> -> end-state -> redirect về <code>/</code><br/>
+        <code>tryAgain</code> -> quay về <code>loginForm</code>
+    </div>
+</div>
+</body>
+</html>

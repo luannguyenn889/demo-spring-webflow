@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Login Flow</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #eef2f7;
+            color: #1f2937;
+            margin: 0;
+            padding: 32px 16px;
+        }
+
+        .panel {
+            max-width: 460px;
+            margin: 0 auto;
+            background: #ffffff;
+            border: 1px solid #dbe2ea;
+            border-radius: 12px;
+            padding: 28px;
+            box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+
+        .hint {
+            margin-bottom: 20px;
+            color: #52606d;
+            line-height: 1.5;
+        }
+
+        .error {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #b91c1c;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #cbd2d9;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            background: #2563eb;
+            color: #ffffff;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .meta {
+            margin-top: 18px;
+            font-size: 14px;
+            color: #52606d;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        a {
+            color: #2563eb;
+        }
+    </style>
+</head>
+<body>
+<div class="panel">
+    <h1>Login Flow</h1>
+    <p class="hint">
+        Đây là <strong>view-state</strong> đầu tiên. Form sẽ bind vào object
+        <code>credentials</code> đang được giữ trong flow scope.
+    </p>
+
+    <div th:if="${flashScope.contains('errorMessage')}" class="error">
+        <span th:text="${flashScope.get('errorMessage')}">Thông báo lỗi</span>
+    </div>
+
+    <!--
+        flowExecutionUrl la URL resume flow, vi du /login?execution=e1s1
+        _eventId_submit tuong ung voi transition on="submit" trong flow XML.
+    -->
+    <form th:action="${flowExecutionUrl}" th:object="${credentials}" method="post">
+        <label for="username">Username</label>
+        <input id="username" type="text" th:field="*{username}" placeholder="admin"/>
+
+        <label for="password">Password</label>
+        <input id="password" type="password" th:field="*{password}" placeholder="123456"/>
+
+        <button type="submit" name="_eventId_submit">Đăng nhập</button>
+    </form>
+
+    <div class="meta">
+        Demo account: <strong>admin / 123456</strong><br/>
+        Quay về trang chủ: <a href="/">/</a>
+    </div>
+</div>
+</body>
+</html>

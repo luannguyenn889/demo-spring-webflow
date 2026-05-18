@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Login flow don gian cho nguoi moi.
+
+    ASCII flow:
+
+    [loginForm] =submit=> [validateInput] =valid=> [authenticateUser] =success=> [loginSuccess] =finish=> [flowEnd]
+         ^                        |                        |
+         |                        | invalid                | failure
+         |                        v                        v
+         +====== [validationError] <= [loginFailed]
+                              |
+                              +=> quay lai loginForm va hien thi loi
+-->
+<flow xmlns="http://www.springframework.org/schema/webflow"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.springframework.org/schema/webflow
+      http://www.springframework.org/schema/webflow/spring-webflow.xsd">
+
+    <!--
+        Var = bien duoc luu trong flowScope.
+        Credentials ton tai trong suot mot flow execution.
+    -->
+    <var name="credentials" class="com.example.webflow.model.LoginCredentials"/>
+
+    <!--
+        view-state:
+        - Hien thi form login.
+        - model="credentials" de bind input vao object LoginCredentials.
+        - binder cho phep bind 2 field username/password.
+    -->
+    <view-state id="loginForm" view="login/loginForm" model="credentials">
+        <binder>
+            <binding property="username"/>
+            <binding property="password"/>
+        </binder>
+        <transition on="submit" to="validateInput"/>
+    </view-state>
+
+    <!--
+        action-state:
+        - Goi service de kiem tra field rong.
+        - Ket qua "valid"/"invalid" duoc luu vao flowScope.
+        - decision-state phia sau doc bien nay de re nhanh.
+    -->
+    <action-state id="validateInput">
+        <evaluate expression="authenticationService.validateCredentials(credentials)"
+                  result="flowScope.validationResult"/>
+        <transition to="checkValidationResult"/>
+    </action-state>
+
+    <!--
+        decision-state:
+        - Neu validationResult la valid thi di tiep.
+        - Neu invalid thi set loi va quay lai loginForm.
+    -->
+    <decision-state id="checkValidationResult">
+        <if test="'valid'.equals(flowScope.validationResult)"
+            then="authenticateUser"
+            else="validationError"/>
+    </decision-state>
+
+    <!--
+        action-state:
+        - Dat thong bao loi vao flashScope.
+        - flashScope phu hop voi message ngan han chi cho lan render ke tiep.
+    -->
+    <action-state id="validationError">
+        <evaluate expression="'Vui lòng nhập đầy đủ username và password.'"
+                  result="flashScope.errorMessage"/>
+        <transition to="loginForm"/>
+    </action-state>
+
+    <!--
+        action-state:
+        - Goi service de xac thuc.
+        - Ket qua true/false duoc luu vao flowScope.loginSuccess.
+    -->
+    <action-state id="authenticateUser">
+        <evaluate expression="authenticationService.authenticate(credentials)"
+                  result="flowScope.loginSuccess"/>
+        <transition to="checkLoginResult"/>
+    </action-state>
+
+    <!--
+        decision-state:
+        - true  -> loginSuccess
+        - false -> loginFailed
+    -->
+    <decision-state id="checkLoginResult">
+        <if test="flowScope.loginSuccess"
+            then="loginSuccess"
+            else="loginFailed"/>
+    </decision-state>
+
+    <!--
+        action-state:
+        - Dat loi dang nhap that bai vao flashScope.
+        - Sau do quay lai form.
+    -->
+    <action-state id="loginFailed">
+        <evaluate expression="'Sai tên đăng nhập hoặc mật khẩu!'"
+                  result="flashScope.errorMessage"/>
+        <transition to="loginForm"/>
+    </action-state>
+
+    <!--
+        view-state:
+        - Hien thi trang thanh cong.
+        - tryAgain cho phep quay ve form.
+        - finish ket thuc flow.
+    -->
+    <view-state id="loginSuccess" view="login/loginSuccess">
+        <transition on="tryAgain" to="loginForm"/>
+        <transition on="finish" to="flowEnd"/>
+    </view-state>
+
+    <!--
+        end-state:
+        - Ket thuc flow execution.
+        - Redirect ve trang chu.
+    -->
+    <end-state id="flowEnd" view="externalRedirect:/"/>
+
+</flow>
