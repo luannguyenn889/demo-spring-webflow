@@ -36,6 +36,7 @@ public class WebFlowConfig extends AbstractFlowConfiguration {
     // Dang ky tat ca cac flow XML.
     // setBasePath: thu muc goc chua cac file flow XML
     // addFlowLocationPattern: pattern tim kiem file flow
+    // 
     @Bean
     public FlowDefinitionRegistry flowRegistry(FlowBuilderServices flowBuilderServices) {
         return getFlowDefinitionRegistryBuilder()
@@ -46,6 +47,7 @@ public class WebFlowConfig extends AbstractFlowConfiguration {
     }
 
     // FlowBuilderServices: cung cap cac dich vu de xay dung flow.
+    // viewFactoryCreator: tao view cho flow.
     @Bean
     public FlowBuilderServices flowBuilderServices(AjaxThymeleafViewResolver flowAjaxThymeleafViewResolver) {
         MvcViewFactoryCreator viewFactoryCreator = new MvcViewFactoryCreator();
