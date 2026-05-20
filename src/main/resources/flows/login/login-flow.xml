@@ -36,7 +36,10 @@
         </binder>
         <transition on="submit" to="validateInput"/>
     </view-state>
-
+<!--    <view-state id="loginSuccess" view="login/loginSuccess">-->
+<!--        <transition on="tryAgain" to="loginForm"/>-->
+<!--        <transition on="finish" to="flowEnd"/>-->
+<!--    </view-state>-->
     <!--
         action-state:
         - Goi service de kiem tra field rong.
